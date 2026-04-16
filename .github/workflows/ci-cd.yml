@@ -1,4 +1,4 @@
-name: Dockerized Go CI/CD Pipeline
+name: 🐳 Dockerized Go CI/CD Pipeline
 
 on:
   push:
@@ -10,26 +10,26 @@ jobs:
     runs-on: [self-hosted, windows]
     
     steps:
-      - name: Checkout Code
+      - name: 📥 Checkout Code
         uses: actions/checkout@v3
 
-      - name: Mở cổng và Chạy Bài Test
+      - name: 🧪 Run Unit Tests
         run: |
-          echo "Kiểm tra mã nguồn..."
+          echo "🔍 Analyzing and testing Source Code..."
           go test -v ./...
           
-      - name: Đóng gói với Docker (Build Image)
+      - name: 🐳 Build Docker Image
         run: |
-          echo "Bắt đầu nhồi vào Docker..."
+          echo "🏗️ Building Docker Image: my-go-app:latest..."
           docker build -t my-go-app:latest .
           
-      - name: Deploy chạy tự động trên Docker
+      - name: 🚀 Deploy Container
         run: |
-          echo "Triển khai phần mềm mới!"
-          # Bước 1: Khéo léo tìm và xoá container phiên bản cũ
+          echo "🚢 Deploying new container..."
+          # Clean up old container
           try { docker rm -f my-app-running } catch { }
           
-          # Bước 2: Chạy phiên bản mới nhất ở cổng 8080 dạng chạy ngầm (-d)
+          # Start the new container
           docker run -d --name my-app-running -p 8080:8080 my-go-app:latest
           
-          echo "Ứng dụng Docker đã được triển khai xong trên cổng 8080!"
+          echo "✅ Application successfully launched on Port 8080!"
