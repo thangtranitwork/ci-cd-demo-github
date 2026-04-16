@@ -8,9 +8,8 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: rootsecret
+      # Chỉ dùng root để đơn giản, tránh conflict khi volume đã tồn tại
       MYSQL_DATABASE: feature_flags
-      MYSQL_USER: appuser
-      MYSQL_PASSWORD: appsecret
     ports:
       - "3306:3306"
     volumes:
@@ -20,7 +19,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-      start_period: 10s
+      start_period: 15s
     networks:
       - app-network
 
@@ -54,7 +53,7 @@ services:
       MYSQL_HOST: mysql
       MYSQL_PORT: "3306"
       MYSQL_USER: root
-      MYSQL_PASSWORD: secret
+      MYSQL_PASSWORD: rootsecret        # ← khớp với MYSQL_ROOT_PASSWORD
       MYSQL_DATABASE: feature_flags
       REDIS_HOST: redis
       REDIS_PORT: "6379"

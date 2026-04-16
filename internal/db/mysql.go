@@ -15,7 +15,7 @@ var DB *sql.DB
 func InitMySQL() {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
 		getEnv("MYSQL_USER", "root"),
-		getEnv("MYSQL_PASSWORD", "secret"),
+		getEnv("MYSQL_PASSWORD", "rootsecret"),
 		getEnv("MYSQL_HOST", "localhost"),
 		getEnv("MYSQL_PORT", "3306"),
 		getEnv("MYSQL_DATABASE", "feature_flags"),
