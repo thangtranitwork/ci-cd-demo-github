@@ -1,0 +1,36 @@
+name: Go CI/CD with Windows Self-Hosted Runner
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_test_deploy:
+    # Ở GitHub, để chạy cấu hình máy cá nhân, bạn khai báo là 'self-hosted' (và 'windows' để bắt các Action Runner cấu hình ở HĐH windows)
+    runs-on: [self-hosted, windows]
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Go environment
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+          
+      - name: Run Tests
+        run: |
+          echo "Bắt đầu Test..."
+          go test -v ./...
+          
+      - name: Build
+        run: |
+          echo "Bắt đầu Build file exe..."
+          go build -o app.exe main.go
+          
+      - name: Deploy to D drive
+        run: |
+          echo "Bắt đầu copy sang ổ D:/"
+          copy app.exe "D:\app.exe"
+          echo "Hoàn thành Deploy thiết thực!"

@@ -1,0 +1,31 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build_app:
+  stage: build
+  script:
+    - echo "Building the Go application..."
+    - go build -o app.exe main.go
+  artifacts:
+    paths:
+      - app.exe
+
+test_app:
+  stage: test
+  script:
+    - echo "Running tests..."
+    - go test -v ./...
+
+deploy_app:
+  stage: deploy
+  script:
+    - echo "Deploying app to D:/..."
+    # Lệnh copy của hệ thống Windows
+    - copy app.exe "D:\app.exe"
+    - echo "Copy thanh cong!"
+  environment:
+    name: production
+  only:
+    - main
