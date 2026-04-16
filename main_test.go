@@ -3,20 +3,48 @@ package main
 import (
 	"net/http"
 	"net/http/httptest"
-	"strings"
 	"testing"
 )
 
-func TestHello(t *testing.T) {
-	req := httptest.NewRequest("GET", "/", nil)
+func TestHealthHandler(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/health", nil)
 	w := httptest.NewRecorder()
-
-	hello(w, req)
+	healthHandler(w, req)
 
 	if w.Code != http.StatusOK {
 		t.Errorf("Expected 200, got %d", w.Code)
 	}
-	if !strings.Contains(w.Body.String(), "Hello") {
-		t.Errorf("Expected 'Hello' in body")
+	if w.Body.String() == "" {
+		t.Error("Expected non-empty body")
+	}
+}
+
+func TestRootHandler(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	w := httptest.NewRecorder()
+	rootHandler(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Errorf("Expected 200, got %d", w.Code)
+	}
+}
+
+func TestListUsersHandler(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/users", nil)
+	w := httptest.NewRecorder()
+	listUsersHandler(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Errorf("Expected 200, got %d", w.Code)
+	}
+}
+
+func TestListProductsHandler(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/api/products", nil)
+	w := httptest.NewRecorder()
+	listProductsHandler(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Errorf("Expected 200, got %d", w.Code)
 	}
 }
