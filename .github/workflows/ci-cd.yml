@@ -7,29 +7,29 @@ on:
 
 jobs:
   build_test_deploy:
-    runs-on: [self-hosted, windows]
-    
+    runs-on: [ self-hosted, windows ]
+
     steps:
-      - name: 📥 Checkout Code
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: 🧪 Run Unit Tests
+      - name: Run Unit Tests
         run: |
-          echo "🔍 Analyzing and testing Source Code..."
+          echo "Analyzing and testing Source Code..."
           go test -v ./...
-          
-      - name: 🐳 Build Docker Image
+
+      - name: Build Docker Image
         run: |
-          echo "🏗️ Building Docker Image: my-go-app:latest..."
+          echo "Building Docker Image: my-go-app:latest..."
           docker build -t my-go-app:latest .
-          
-      - name: 🚀 Deploy Container
+
+      - name: Deploy Container
         run: |
-          echo "🚢 Deploying new container..."
+          echo "Deploying new container..."
           # Clean up old container
           try { docker rm -f my-app-running } catch { }
           
           # Start the new container
           docker run -d --name my-app-running -p 8080:8080 my-go-app:latest
           
-          echo "✅ Application successfully launched on Port 8080!"
+          echo "Application successfully launched on Port 8080!"
