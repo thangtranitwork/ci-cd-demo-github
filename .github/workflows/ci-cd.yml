@@ -1,4 +1,4 @@
-name: Go CI/CD with Windows Self-Hosted Runner
+name: Dockerized Go CI/CD Pipeline
 
 on:
   push:
@@ -7,26 +7,29 @@ on:
 
 jobs:
   build_test_deploy:
-    # Ở GitHub, để chạy cấu hình máy cá nhân, bạn khai báo là 'self-hosted' (và 'windows' để bắt các Action Runner cấu hình ở HĐH windows)
     runs-on: [self-hosted, windows]
     
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-
-      - name: Run Tests
+      - name: Mở cổng và Chạy Bài Test
         run: |
-          echo "Bắt đầu Test..."
+          echo "Kiểm tra mã nguồn..."
           go test -v ./...
-
-      - name: Build
+          
+      - name: Đóng gói với Docker (Build Image)
         run: |
-          echo "Bắt đầu Build file exe..."
-          go build -o app.exe main.go
-
-      - name: Deploy to D drive
+          echo "Bắt đầu nhồi vào Docker..."
+          docker build -t my-go-app:latest .
+          
+      - name: Deploy chạy tự động trên Docker
         run: |
-          echo "Bắt đầu copy sang ổ D:/"
-          copy app.exe "D:\app.exe"
-          echo "Hoàn thành Deploy thiết thực!"
+          echo "Triển khai phần mềm mới!"
+          # Bước 1: Khéo léo tìm và xoá container phiên bản cũ
+          try { docker rm -f my-app-running } catch { }
+          
+          # Bước 2: Chạy phiên bản mới nhất ở cổng 8080 dạng chạy ngầm (-d)
+          docker run -d --name my-app-running -p 8080:8080 my-go-app:latest
+          
+          echo "Ứng dụng Docker đã được triển khai xong trên cổng 8080!"
